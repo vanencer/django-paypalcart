@@ -1,0 +1,8 @@
+<h2>Checkout</h2>
+<p>This is the checkout page - page shows the total amount of the order. The only required value is the amount.</p>
+<p>This page posts to itself (rather than paypal), relying on the view code to do the redirect. This allows you to do validation if necessary.</p>
+<form action="" method="post">
+    $<input name="amount" value="200.00" />
+    <input name="currency" value="AUD" />
+    <input type="submit" value="Checkout" />
+</form>

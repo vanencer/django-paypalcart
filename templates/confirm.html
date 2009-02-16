@@ -1,0 +1,17 @@
+<h2>Confirm</h2>
+<p>This page allows the user to confirm their order on your website.</p>
+<p>All data that is available about the user (requested from PayPal) is displayed below:</p>
+
+<table>
+{% for key, value in data.items %}
+    <tr><td>{{ key }}</td><td>{{ value.0 }}</td></tr>
+{% endfor %}
+</table>
+
+<p>The following values must be passed to the success url to complete the transaction:</p>
+<form action="{{ success_url }}" method="post">
+    token <input type="text" name="token" value="{{ data.TOKEN.0 }}" /><br/>
+    amount <input type="text" name="amount" value="{{ data.AMT.0 }}" /><br/>
+    payerid <input type="text" name="payerid" value="{{ data.PAYERID.0 }}" /><br/>
+    <input type="submit" value="Confirm" />
+</form>
