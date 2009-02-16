@@ -4,6 +4,7 @@ There's two ways to use this app:
 a) As a basic cart
 b) As an API
 
+
 Option a) Using the app as a _basic cart_ allows you to quickly get your
 store up and running by providing the views necessary to complete an express
 checkout.
@@ -33,6 +34,8 @@ checkout.
 
 4. Profit
 
+    Visit /cart/checkout/ in your browser and check it out
+    
 
 Option b) You can also use our implementation of the _PayPal NVP API_
 directly. This allows you to fully customise the checkout experience.

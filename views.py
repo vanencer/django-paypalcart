@@ -10,22 +10,22 @@ def checkout(request):
         paypal_url = paypal.URL_CHECKOUT + token
         #paypal_url += '&useraction=commit'
         return HttpResponseRedirect(paypal_url)
-    return render_to_response('cart/checkout.html')
+    return render_to_response('checkout.html')
     
     
 def success(request):
     paypal = PayPal.PayPal()
     result = paypal.DoExpressCheckoutPayment(request.POST['token'], request.POST['payerid'], request.POST['amount'])
     params = {'data':result}
-    return render_to_response('cart/success.html', params)
+    return render_to_response('success.html', params)
 
     
 def cancel(request):
-    return render_to_response('cart/cancel.html')
+    return render_to_response('cancel.html')
     
 
 def confirm(request):
     paypal = PayPal.PayPal()
     data = paypal.GetExpressCheckoutDetails(request.GET['token'])
     params = {'data':data, 'success_url':reverse('django_paypalcart.views.success')}
-    return render_to_response('cart/confirm.html', params)
+    return render_to_response('confirm.html', params)
