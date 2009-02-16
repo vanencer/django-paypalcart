@@ -1,0 +1,77 @@
+Welcome to django-paypalcart
+
+There's two ways to use this app:
+a) As a basic cart
+b) As an API
+
+Option a) Using the app as a _basic cart_ allows you to quickly get your
+store up and running by providing the views necessary to complete an express
+checkout.
+=========================================================================
+
+1. Checkout django_paypalcart into your pythons site-packages directory
+
+    git clone git://github.com/aidanlister/django-paypalcart.git \
+        site-packages/django_paypalcart
+
+2. Add to INSTALLED_APPS
+
+    INSTALLED_APPS = (
+       ...
+       'django_paypalcart',
+       ...
+
+3. Set your Paypal API credentials in settings.py for your project
+
+    PAYPALCART_API_USER = ''
+    PAYPALCART_API_PASSWORD = ''
+    PAYPALCART_API_SIGNATURE = ''
+            
+3. Add to urls.py for your project
+
+   (r'^cart/',         include('django_paypalcart.urls')),
+
+4. Profit
+
+
+Option b) You can also use our implementation of the _PayPal NVP API_
+directly. This allows you to fully customise the checkout experience.
+========================================================================
+
+1. Checkout django_paypalcart into your pythons site-packages directory
+
+    git clone git://github.com/aidanlister/django-paypalcart.git \
+        site-packages/django_paypalcart
+        
+2. Import into the relevant view
+
+    from django_paypalcart import PayPal
+    
+3. Set your Paypal API credentials in settings.py for your project
+
+    PAYPALCART_API_USER = ''
+    PAYPALCART_API_PASSWORD = ''
+    PAYPALCART_API_SIGNATURE = ''
+    
+4. Use the API directly
+
+    paypal = django_paypalcart.PayPal()
+    paypal.SetExpressCheckout(...)
+    
+    
+License, disclaimer, etc
+=========================================================================
+All code within this package is released into the Public Domain, allowing
+modification and redistribution without credit to the original authors.
+
+If you'd like to improve any of the code, or contribute in any way, you
+are absolutely encouraged!
+
+No rights are reserved, and all liability is waived - use at your own risk.
+
+
+Authors and credits
+=========================================================================
+Aidan Lister <aidan@php.net>
+Mike Atlas [http://www.linkedin.com/in/mikeatlas]
+Shabda [http://uswaretech.com/]
