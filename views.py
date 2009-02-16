@@ -5,17 +5,31 @@ from django_paypalcart import PayPal
     
 def checkout(request):
     if request.method == "POST":  
+        baseurl = request.build_absolute_uri().replace('http://', '')
+        baseurl = 'http://' + baseurl.split('/', 2)[0]
+        
         paypal = PayPal.PayPal()
-        token = paypal.SetExpressCheckout(request.POST['amount'], 'django_paypalcart.views.confirm', 'django_paypalcart.views.cancel')        
-        paypal_url = paypal.URL_CHECKOUT + token
-        #paypal_url += '&useraction=commit'
-        return HttpResponseRedirect(paypal_url)
+        response = paypal.SetExpressCheckout(
+            cancelurl=baseurl + reverse('django_paypalcart.views.cancel'),
+            returnurl=baseurl + reverse('django_paypalcart.views.confirm'),
+            amt=request.POST['amount'],
+            currencycode=request.POST['amount'])
+        
+        if response['ACK'] == 'Success':
+            url = paypal.express_checkout_url + response['TOKEN']
+            #url += '&useraction=commit' # Use to skip the confirm page
+            return HttpResponseRedirect(url)
+    
     return render_to_response('checkout.html')
     
     
 def success(request):
     paypal = PayPal.PayPal()
-    result = paypal.DoExpressCheckoutPayment(request.POST['token'], request.POST['payerid'], request.POST['amount'])
+    result = paypal.DoExpressCheckoutPayment(
+        paymentaction='Sale',
+        token=request.POST['token'],
+        payerid=request.POST['payerid'],
+        amt=request.POST['amount'])
     params = {'data':result}
     return render_to_response('success.html', params)
 
@@ -26,6 +40,6 @@ def cancel(request):
 
 def confirm(request):
     paypal = PayPal.PayPal()
-    data = paypal.GetExpressCheckoutDetails(request.GET['token'])
+    data = paypal.GetExpressCheckoutDetails(token=request.GET['token'])
     params = {'data':data, 'success_url':reverse('django_paypalcart.views.success')}
     return render_to_response('confirm.html', params)
