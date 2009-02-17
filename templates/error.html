@@ -1,0 +1,16 @@
+<h2>Error</h2>
+
+<p>There was a fatal error and we were unable to continue with your transaction.</p>
+
+
+{% ifequal type 'IOError' %}<div class="message">We were unable to communicate with PayPal at this time. Please try again later.</div>{% endifequal %}
+{% ifequal type 'KeyError' %}<div class="message">Some information that we expected to receive was not present. Please try again.</div>{% endifequal %}
+
+
+{% if response %}
+<table>
+{% for key, value in response.items %}
+    <tr><td>{{ key }}</td><td>{{ value }}</td></tr>
+{% endfor %}
+</table>
+{% endif %}

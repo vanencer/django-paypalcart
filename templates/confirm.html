@@ -3,15 +3,15 @@
 <p>All data that is available about the user (requested from PayPal) is displayed below:</p>
 
 <table>
-{% for key, value in data.items %}
+{% for key, value in response.items %}
     <tr><td>{{ key }}</td><td>{{ value }}</td></tr>
 {% endfor %}
 </table>
 
 <p>The following values must be passed to the success url to complete the transaction:</p>
 <form action="{{ success_url }}" method="post">
-    token <input type="text" name="token" value="{{ data.TOKEN }}" /><br/>
-    amount <input type="text" name="amount" value="{{ data.AMT }}" /><br/>
-    payerid <input type="text" name="payerid" value="{{ data.PAYERID }}" /><br/>
+    token <input type="text" name="token" value="{{ response.TOKEN }}" /><br/>
+    amount <input type="text" name="amount" value="{{ response.AMT }}" /><br/>
+    payerid <input type="text" name="payerid" value="{{ response.PAYERID }}" /><br/>
     <input type="submit" value="Confirm" />
 </form>
