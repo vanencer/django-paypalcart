@@ -9,11 +9,13 @@ def checkout(request):
         baseurl = 'http://' + baseurl.split('/', 2)[0]
         paypal = PayPal.PayPal()
         try:
-            response = paypal.SetExpressCheckout(
-                cancelurl    = baseurl + reverse('django_paypalcart.views.cancel'),
-                returnurl    = baseurl + reverse('django_paypalcart.views.confirm'),
-                amt          = request.POST['amt'],
-                currencycode = request.POST['currencycode'])
+            params = {
+                'cancelurl':    baseurl + reverse('django_paypalcart.views.cancel'),
+                'returnurl':    baseurl + reverse('django_paypalcart.views.confirm'),
+                'amt':          request.POST['amt'],
+                'currencycode': request.POST['currencycode']
+                }
+            response = paypal.SetExpressCheckout(params)
             assert response['ACK'] == 'Success'
             assert response['TOKEN']
         except IOError:
@@ -32,13 +34,15 @@ def checkout(request):
     
 def success(request):
     paypal = PayPal.PayPal()
-    
     try:
-        response = paypal.DoExpressCheckoutPayment(
-            paymentaction='Sale',
-            token=request.POST['token'],
-            payerid=request.POST['payerid'],
-            amt=request.POST['amount'])
+        params = {
+            'paymentaction': 'Sale',
+            'token':         request.POST['token'],
+            'payerid':       request.POST['payerid'],
+            'amt':           request.POST['amount'],
+            'currencycode':  request.POST['currencycode']
+            }
+        response = paypal.DoExpressCheckoutPayment(params)
         assert response['ACK'] == 'Success'
     except IOError:
         return render_to_response('error.html', {'type':'IOError'})
@@ -48,8 +52,9 @@ def success(request):
         return render_to_response('error.html', {'type':'ProcessingError', 'response':response})
 
     # Everything seems to have gone okay and the customer is charged
-    # We might want to check PAYMENTSTATUS == Completed | Pending and decide what to do
-    
+    # Things to consider before sending digital goods:
+    #   Check PAYMENTSTATUS. It might be "Completed" or "Pending"
+    #   Check PAYMENTTYPE. It might be "instant" (you have the cash) or "echeque" (could bounce)    
     
     params = {'response':response}
     return render_to_response('success.html', params)
@@ -62,7 +67,8 @@ def cancel(request):
 def confirm(request):
     paypal = PayPal.PayPal()
     try:
-        response = paypal.GetExpressCheckoutDetails(token=request.GET['token'])
+        params = {'token': request.GET['token']}
+        response = paypal.GetExpressCheckoutDetails(params)
         assert response['ACK'] == 'Success'
     except IOError:
         return render_to_response('error.html', {'type':'IOError'})

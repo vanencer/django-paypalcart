@@ -12,6 +12,7 @@
 <form action="{{ success_url }}" method="post">
     token <input type="text" name="token" value="{{ response.TOKEN }}" /><br/>
     amount <input type="text" name="amount" value="{{ response.AMT }}" /><br/>
+    currencycode <input type="text" name="currencycode" value="AUD" /><br/>
     payerid <input type="text" name="payerid" value="{{ response.PAYERID }}" /><br/>
     <input type="submit" value="Confirm" />
 </form>
